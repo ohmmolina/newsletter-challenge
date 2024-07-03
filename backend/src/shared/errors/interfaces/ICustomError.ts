@@ -1,6 +1,6 @@
 import type { ErrorStructure } from '../types'
 
-export interface CustomError {
+export interface ICustomError {
   name: string
   message: string
   getError(): ErrorStructure

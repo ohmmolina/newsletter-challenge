@@ -1,7 +1,7 @@
 import type { ErrorStructure } from '../types'
-import type { CustomError } from '../interfaces'
+import type { ICustomError } from '../interfaces'
 
-export class SystemError extends Error implements CustomError {
+export class SystemError extends Error implements ICustomError {
   name: string
   message: string
   private error: ErrorStructure = {} as ErrorStructure

@@ -6,7 +6,7 @@ declare global {
     details?: Record<string, unknown>
   }
 
-  interface CustomError {
+  interface ICustomError {
     name: string
     message: string
     getError(): ErrorStructure
@@ -14,7 +14,7 @@ declare global {
     handle(): void
   }
 
-  class SystemError extends ERror implements CustomError {
+  class SystemError extends Error implements ICustomError {
     name: string
     message: string
     error: ErrorStructure = {} as ErrorStructure

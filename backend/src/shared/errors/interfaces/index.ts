@@ -1,3 +1,3 @@
-import type { CustomError } from './CustomError'
+import type { ICustomError } from './ICustomError'
 
-export type { CustomError }
+export type { ICustomError }
