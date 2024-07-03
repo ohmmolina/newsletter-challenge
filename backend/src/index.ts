@@ -1,5 +1,5 @@
 import express from 'express'
-import { Mailer } from './shared/helpers/mailers'
+import { Mailer } from './helpers/mailers'
 
 const app = express()
 app.use(express.json())
