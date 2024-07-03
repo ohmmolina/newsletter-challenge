@@ -1,0 +1,16 @@
+[
+  {
+    "id": "1",
+    "email": "example1@email.com",
+    "createdAt": "2021-09-01T00:00:00.000Z",
+    "updatedAt": "2021-09-01T00:00:00.000Z",
+    "subscribed": true
+  },
+  {
+    "id": "2",
+    "email": "example2@email.com",
+    "createdAt": "2021-09-01T00:00:00.000Z",
+    "updatedAt": "2021-09-01T00:00:00.000Z",
+    "subscribed": false
+  }
+]

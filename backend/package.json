@@ -6,6 +6,7 @@
     "lint": "eslint .",
     "format": "prettier --write ./src/**/*.ts",
     "start": "bun server.ts",
+    "start-console": "bun src/modules/newsletter/infrastructure/driving-adapters/console/console.ts",
     "dev": "bun --watch server.ts"
   },
   "devDependencies": {
