@@ -1,5 +1,5 @@
-import app from './src/app'
-import validateEnvs from './src/utils/validateEnvs'
+import app from './src'
+import validateEnvs from './src/shared/utils/validateEnvs'
 
 // Stop the server if any required env is missing
 validateEnvs()

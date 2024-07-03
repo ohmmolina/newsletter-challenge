@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer'
 import hbs from 'nodemailer-express-handlebars'
+
 import type { Options } from 'nodemailer/lib/mailer'
 type ExtendedOptions = Options & {
   template: string
@@ -11,10 +12,7 @@ export default class Mailer {
   private from: string
 
   public constructor() {
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS)
-      throw new Error('Email credentials not found')
-
-    this.from = process.env.EMAIL_USER
+    this.from = process.env.EMAIL_USER as string
     this.transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
