@@ -1,18 +1,16 @@
-import type { Request, Response, NextFunction } from 'express'
 import { Router } from 'express'
+import type { Request, Response, NextFunction } from 'express'
 import {
-  readUser,
-  createUser,
-  deleteUser,
-  unsubscribeUser
+  readNewsletter,
+  createNewsletter,
+  sendNewsletter
 } from '../controllers'
 
 const router = Router()
 
-router.get('/', readUser)
-router.post('/', createUser)
-router.patch('/:id', unsubscribeUser)
-router.delete('/:id', deleteUser)
+router.get('/', readNewsletter)
+router.get('/:id/send', sendNewsletter)
+router.post('/', createNewsletter)
 
 router.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof DomainError || err instanceof SystemError) {
@@ -26,7 +24,7 @@ router.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
   } else if (err instanceof Error) {
     console.error(err.stack)
     res.status(500).json({
-      code: 'SYS_USR',
+      code: 'SYS_NWL',
       error: 'Internal Server Error',
       details: {}
     })

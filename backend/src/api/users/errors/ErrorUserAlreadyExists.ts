@@ -1,5 +1,3 @@
-import { DomainError } from '../../../errors'
-
 export class ErrorUserAlreadyExists extends DomainError {
   constructor(email: string) {
     super({

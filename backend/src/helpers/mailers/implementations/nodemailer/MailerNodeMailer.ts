@@ -1,8 +1,14 @@
+import type { Mailer } from '../../interfaces/Mailer'
+import type { Options } from 'nodemailer/lib/mailer'
 import nodemailer from 'nodemailer'
 import hbs from 'nodemailer-express-handlebars'
+import {
+  ErrorInvalidCredentials,
+  ErrorInvalidEnvelope,
+  ErrorNotConnected,
+  ErrorUnexpected
+} from './errors'
 
-import type { IMailer } from '../interfaces/IMailer'
-import type { Options } from 'nodemailer/lib/mailer'
 type ExtendedOptions = Options & {
   template: string
   context: Record<string, unknown>
@@ -12,7 +18,7 @@ type MailerError = {
   name: string
 }
 
-export class Mailer implements IMailer {
+export class MailerNodeMailer implements Mailer {
   private transporter: nodemailer.Transporter
   private from: string
 
@@ -30,7 +36,7 @@ export class Mailer implements IMailer {
       viewEngine: {
         defaultLayout: false
       },
-      viewPath: 'src/assets/emails'
+      viewPath: 'src/helpers/mailers/implementations/nodemailer/templates'
     }
 
     this.transporter.use('compile', hbs(hbsOpts))
@@ -39,27 +45,28 @@ export class Mailer implements IMailer {
   handleMailerError(error: MailerError) {
     switch (error.code) {
       case 'EAUTH':
-        new SystemError('ME001', 'Invalid email credentials', {
-          email: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS
-        }).handle()
+        throw new ErrorInvalidCredentials({
+          email: process.env.EMAIL_USER as string,
+          password: process.env.EMAIL_PASS as string
+        })
         break
       case 'ECONNECTION':
-        new SystemError(
-          'ME002',
-          'Could not connect to the email server'
-        ).handle()
+        throw new ErrorNotConnected()
         break
       case 'EENVELOPE':
-        new SystemError('ME003', 'Invalid email envelope').handle()
+        throw new ErrorInvalidEnvelope()
         break
       default:
-        new SystemError('ME999', 'An unhandled mailer error occurred').handle()
+        throw new ErrorUnexpected({
+          code: 'MAI999',
+          message: 'An unhandled mailer error occurred',
+          details: { error: error.code }
+        })
     }
   }
 
-  async sendMail(
-    to: string,
+  async send(
+    to: string[],
     subject: string,
     template: string,
     context: Record<string, unknown>
@@ -73,14 +80,19 @@ export class Mailer implements IMailer {
         context
       }
       const info = await this.transporter.sendMail(mailOpts)
-      return info
+      return { accepted: info.accepted, rejected: info.rejected }
     } catch (error) {
       if ((error as MailerError).code) {
         this.handleMailerError(error as MailerError)
       } else if (error instanceof Error) {
-        new SystemError('ME000', error.message).handle()
+        throw new ErrorUnexpected({
+          code: 'MAI000',
+          message: error.message
+        })
       } else {
-        new SystemError('ME500', 'An unexpected error occurred').handle()
+        throw new ErrorUnexpected({
+          code: 'MAI500'
+        })
       }
     }
   }
