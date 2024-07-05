@@ -11,7 +11,7 @@ const router = Router()
 
 router.get('/', readUser)
 router.post('/', createUser)
-router.patch('/:id', unsubscribeUser)
+router.patch('/:id/unsubscribe', unsubscribeUser)
 router.delete('/:id', deleteUser)
 
 router.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
