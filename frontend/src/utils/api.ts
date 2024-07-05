@@ -129,6 +129,17 @@ const api = {
       body: data
     })
   },
+  patch: async (
+    path: string,
+    data?: any,
+    options?: FetchOptions
+  ): Promise<ResponseData | ErrorResponse> => {
+    return baseFetch(path, {
+      method: 'PATCH',
+      headers: { ...options?.headers },
+      body: data
+    })
+  },
   delete: async (
     path: string,
     options?: FetchOptions

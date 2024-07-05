@@ -73,6 +73,12 @@ export const useNewslettersStore = defineStore('newsletters', () => {
   async function add() {
     try {
       saving.value = true
+      if (!selectedNewsletter.value.title) {
+        Toasts.errorToast({
+          summary: 'Title is required'
+        })
+        return
+      }
       const response = await services.addNewsletter(selectedNewsletter.value)
       if (response.error) {
         throw new Error(response.error)

@@ -2,13 +2,11 @@
 import DataView from 'primevue/dataview'
 import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useNewslettersStore } from '../stores/newslettersStore'
+import { useUsersStore } from '../stores/usersStore'
 
-const emit = defineEmits(['show-attachments'])
-
-const newsletterStore = useNewslettersStore()
-const { loading, saving, sending, deleting, selectedNewsletter, newsletters } =
-  storeToRefs(newsletterStore)
+const usersStore = useUsersStore()
+const { loading, saving, unsubscribing, deleting, selectedUser, users } =
+  storeToRefs(usersStore)
 
 function formatDate(date: string | number | Date) {
   return new Date(date).toLocaleDateString('en-US', {
@@ -19,37 +17,37 @@ function formatDate(date: string | number | Date) {
 }
 
 onMounted(() => {
-  newsletterStore.getAll()
+  usersStore.getAll()
 })
 </script>
 <template>
-  <DataView :value="newsletters" paginator :rows="5">
+  <DataView :value="users" paginator :rows="5">
     <template #empty>
       <div class="p-text-center">
-        <p class="p-3 italic">Add newsletters to see them here</p>
+        <p class="p-3 italic">Add users to see them here</p>
       </div>
     </template>
     <template #header>
       <form
-        @submit.prevent="newsletterStore.add()"
+        @submit.prevent="usersStore.add()"
         class="flex flex-col md:flex-row md:items-center justify-end gap-4"
       >
         <div class="flex items-center gap-2">
-          <label class="text-lg font-semibold" for="title">Title</label>
+          <label class="text-lg font-semibold" for="email">Email</label>
           <InputText
             class="w-full"
-            id="title"
-            v-model.trim="selectedNewsletter.title"
-            placeholder="Ex. Sales newsletter"
+            id="email"
+            v-model.trim="selectedUser.email"
+            placeholder="Ex. example@email.com"
           />
         </div>
         <Button
-          label="Add newsletter"
+          label="Add user"
           icon="pi pi-plus"
           size="small"
           type="submit"
           :loading="saving"
-          :disabled="loading || !selectedNewsletter.title"
+          :disabled="loading || !selectedUser.email"
         />
       </form>
     </template>
@@ -58,23 +56,23 @@ onMounted(() => {
         <div v-for="item in items" :key="item.id">
           <div class="m-3 p-3 bg-zinc-100 dark:bg-zinc-800 rounded">
             <div
-              class="grid grid-cols-3 md:flex items-center justify-between gap-1 md:gap-10"
+              class="grid grid-cols-5 md:flex items-center justify-between gap-1 md:gap-10"
             >
-              <div class="col-span-2 md:flex-grow flex flex-col">
+              <div class="col-span-5 md:flex-grow flex flex-col gap-0.5">
                 <span class="text-zinc-600 dark:text-zinc-400 text-xs">
-                  Title
+                  Email
                 </span>
-                <h3 class="text-lg font-semibold">{{ item.title }}</h3>
+                <h3 class="text-lg font-semibold">{{ item.email }}</h3>
               </div>
-              <div class="flex flex-col">
+              <div class="col-span-2 w-fit flex flex-col gap-0.5">
                 <span class="text-zinc-600 dark:text-zinc-400 text-xs">
-                  Sended times
+                  Status
                 </span>
-                <span class="font-semibold text-right">
-                  {{ item.sendedTimes }}
-                </span>
+                <Tag :severity="item.subscribed ? 'success' : 'warn'">
+                  {{ item.subscribed ? 'Subscribed' : 'Unsubscribed' }}
+                </Tag>
               </div>
-              <div class="col-span-2 flex flex-col">
+              <div class="col-span-2 flex flex-col gap-0.5">
                 <span class="text-zinc-600 dark:text-zinc-400 text-xs">
                   Last updated
                 </span>
@@ -86,32 +84,25 @@ onMounted(() => {
                   }}
                 </span>
               </div>
-              <div class="grid grid-cols-3 gap-2">
+              <div class="grid grid-cols-2 gap-2">
                 <Button
-                  icon="pi pi-image"
-                  severity="info"
-                  text
-                  @click="emit('show-attachments', item.id)"
-                  :disabled="sending || deleting"
-                  v-tooltip.top="'Attached files'"
-                />
-                <Button
-                  icon="pi pi-envelope"
-                  severity="success"
+                  v-if="item.subscribed"
+                  icon="pi pi-times-circle"
+                  severity="warn"
                   text
                   :disabled="deleting"
-                  :loading="sending"
-                  @click="newsletterStore.send(item.id)"
-                  v-tooltip.top="'Send newsletter'"
+                  :loading="unsubscribing"
+                  @click="usersStore.unsubscribe(item.id)"
+                  v-tooltip.top="'Unsubscribe user'"
                 />
                 <Button
                   icon="pi pi-trash"
                   severity="danger"
                   text
-                  :disabled="sending"
+                  :disabled="unsubscribing"
                   :loading="deleting"
-                  @click="newsletterStore.del(item.id)"
-                  v-tooltip.left="'Delete newsletter'"
+                  @click="usersStore.del(item.id)"
+                  v-tooltip.left="'Delete user'"
                 />
               </div>
             </div>
