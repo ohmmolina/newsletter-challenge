@@ -1,8 +1,14 @@
 import express from 'express'
+import cors from 'cors'
+import helmet from 'helmet'
+
 import usersRoutes from './users/implementations/express/routes'
 import newsletterRoutes from './newsletter/implementations/express/routes'
 
 const app = express()
+
+app.use(cors())
+app.use(helmet())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
