@@ -8,8 +8,8 @@ export const readNewsletter = async (
   next: NextFunction
 ) => {
   try {
-    const newsletter = await new ReadNewsletter(NewsletterRepository).run()
-    res.status(200).json({ newsletter })
+    const newsletters = await new ReadNewsletter(NewsletterRepository).run()
+    res.status(200).json({ newsletters })
   } catch (e) {
     next(e)
   }

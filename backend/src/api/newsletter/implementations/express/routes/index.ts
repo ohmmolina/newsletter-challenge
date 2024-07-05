@@ -7,7 +7,8 @@ import {
   readNewsletterFile,
   createNewsletter,
   uploadFileToNewsletter,
-  sendNewsletter
+  sendNewsletter,
+  deleteNewsletter
 } from '../controllers'
 
 const storage = multer.diskStorage({
@@ -31,7 +32,8 @@ router.get('/', readNewsletter)
 router.get('/:id/files/:idFile', readNewsletterFile)
 router.get('/:id/send', sendNewsletter)
 router.post('/', createNewsletter)
-router.patch('/:id/file', upload.single('file'), uploadFileToNewsletter)
+router.post('/:id/file', upload.single('file'), uploadFileToNewsletter)
+router.delete('/:id', deleteNewsletter)
 
 router.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof DomainError || err instanceof SystemError) {
