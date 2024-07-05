@@ -1,5 +1,13 @@
-import { createNewsletter } from './createNewsletter'
 import { readNewsletter } from './readNewsletter'
+import { readNewsletterFile } from './readNewsletterFile'
+import { createNewsletter } from './createNewsletter'
+import { uploadFileToNewsletter } from './uploadFileToNewsletter'
 import { sendNewsletter } from './sendNewsletter'
 
-export { readNewsletter, createNewsletter, sendNewsletter }
+export {
+  readNewsletter,
+  readNewsletterFile,
+  createNewsletter,
+  uploadFileToNewsletter,
+  sendNewsletter
+}

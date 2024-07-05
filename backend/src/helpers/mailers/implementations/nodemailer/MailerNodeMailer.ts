@@ -36,6 +36,7 @@ export class MailerNodeMailer implements Mailer {
       viewEngine: {
         defaultLayout: false
       },
+      //TODO: replace with relative path
       viewPath: 'src/helpers/mailers/implementations/nodemailer/templates'
     }
 

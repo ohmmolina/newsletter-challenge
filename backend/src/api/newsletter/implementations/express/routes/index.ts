@@ -1,16 +1,37 @@
-import { Router } from 'express'
 import type { Request, Response, NextFunction } from 'express'
+import path from 'path'
+import { Router } from 'express'
+import multer from 'multer'
 import {
   readNewsletter,
+  readNewsletterFile,
   createNewsletter,
+  uploadFileToNewsletter,
   sendNewsletter
 } from '../controllers'
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './uploads/newsletter')
+  },
+  filename: (req, file, cb) => {
+    cb(null, 'newsletter-' + Date.now() + path.extname(file.originalname))
+  }
+})
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 5000000 // 5MB
+  }
+})
 
 const router = Router()
 
 router.get('/', readNewsletter)
+router.get('/:id/files/:idFile', readNewsletterFile)
 router.get('/:id/send', sendNewsletter)
 router.post('/', createNewsletter)
+router.patch('/:id/file', upload.single('file'), uploadFileToNewsletter)
 
 router.use((err: unknown, req: Request, res: Response, next: NextFunction) => {
   if (err instanceof DomainError || err instanceof SystemError) {

@@ -1,7 +1,12 @@
+type NewsletterFile = {
+  id: string
+  file: string
+}
+
 export interface Newsletter {
   id: string
   title: string
-  files: string[]
+  files: NewsletterFile[]
   sendedTimes: number
   createdAt: Date
   updatedAt?: Date
