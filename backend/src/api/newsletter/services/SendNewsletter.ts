@@ -3,6 +3,7 @@ import type { UserRepository } from '../../users/interfaces/UserRepository'
 import type { Mailer } from '../../../helpers/mailers/interfaces/Mailer'
 import { ErrorNewsletterNotFound, ErrorNoUsersRegistered } from '../errors'
 import { v4 as uuidv4 } from 'uuid'
+import path from 'path'
 
 export class SendNewsletter {
   private _repository: NewsletterRepository
@@ -39,15 +40,19 @@ export class SendNewsletter {
     }
     for await (const user of users) {
       const index = users.indexOf(user)
-      const info = await this._mailer.send(
-        [user.email],
-        'Challenge Newsletter',
-        'newsletter',
-        {
+      const info = await this._mailer.send({
+        to: [user.email],
+        subject: 'Challenge Newsletter',
+        template: 'newsletter',
+        context: {
           //TODO: replace localhost with .env domain variable
           unsubscribeURL: `http://localhost:5001/unsubscribe/?token=${uuids[index]}`
-        }
-      )
+        },
+        attachments: newsletter.files.map((file) => ({
+          filename: 'newsletter.' + file.file.split('.').pop(),
+          path: path.join(process.cwd(), 'uploads/newsletter', file.file)
+        }))
+      })
       if (info) {
         if (info.accepted.length) {
           emails.accepted.push(...info.accepted)

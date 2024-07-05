@@ -19,7 +19,7 @@ export class ReadNewsletterFile {
       throw new ErrorFileNotFound(fileId)
     }
     const filePath = path.join(process.cwd(), 'uploads/newsletter', file.file)
-    const fileFound = fs.readFileSync(filePath)
+    const fileFound = fs.existsSync(filePath)
     if (!fileFound) {
       throw new ErrorFileNotFound(fileId)
     }

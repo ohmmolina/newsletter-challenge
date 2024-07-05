@@ -66,19 +66,27 @@ export class MailerNodeMailer implements Mailer {
     }
   }
 
-  async send(
-    to: string[],
-    subject: string,
-    template: string,
+  async send({
+    to,
+    subject,
+    template,
+    context,
+    attachments
+  }: {
+    to: string[]
+    subject: string
+    template: string
     context: Record<string, unknown>
-  ) {
+    attachments?: { filename: string; path: string }[]
+  }) {
     try {
       const mailOpts: ExtendedOptions = {
         from: this.from,
         to,
         subject,
         template,
-        context
+        context,
+        attachments
       }
       const info = await this.transporter.sendMail(mailOpts)
       return { accepted: info.accepted, rejected: info.rejected }
