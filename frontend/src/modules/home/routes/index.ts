@@ -2,11 +2,11 @@ import type { RouteRecordRaw } from 'vue-router'
 const routes: RouteRecordRaw[] = [
   {
     path: '',
-    name: 'home',
+    name: 'newsletters',
     meta: {
-      title: 'Newsletter'
+      title: 'Newsletters'
     },
-    component: () => import('../views/HomeView.vue')
+    component: () => import('../views/NewslettersView.vue')
   }
 ]
 
