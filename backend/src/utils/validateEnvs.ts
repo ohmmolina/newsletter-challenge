@@ -3,8 +3,13 @@ export default function validateEnvs() {
 
   const missingEnvs = requiredEnvs.filter((env) => !process.env[env])
   if (missingEnvs.length) {
-    new SystemError('E001', 'Missing required environment variables', {
-      missingEnvs
+    new SystemError({
+      code: 'E001',
+      status: 500,
+      message: 'Missing required environment variables',
+      details: {
+        missingEnvs
+      }
     }).handle()
     process.exit(1)
   }
