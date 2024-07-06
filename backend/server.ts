@@ -1,7 +1,7 @@
 // Import error handlers
 import './src/errors'
 // Import the app
-import app from './src'
+import app from './src/api'
 // Import the env validator
 import validateEnvs from './src/utils/validateEnvs'
 

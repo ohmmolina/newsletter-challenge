@@ -1,15 +1,10 @@
-# newsletter-backend
+# newsletter-challenge-backend
 
-To install dependencies:
+Made with Express + NodeMailer and no Database
 
-```bash
-bun install
-```
+<small>Database could be added easily implementing the desired repository in the `models` folder of any module</small>
 
-To run:
+Required envs:
 
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.1.17. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+- EMAIL_USER
+- EMAIL_PASS
