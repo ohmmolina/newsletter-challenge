@@ -1,6 +1,10 @@
 {
   "name": "newsletter-frontend",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "author": {
+    "name": "Omar Molina",
+    "email": "ohmmolina@gmail.com"
+  },
   "private": true,
   "type": "module",
   "scripts": {

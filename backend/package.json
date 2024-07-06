@@ -1,5 +1,10 @@
 {
   "name": "newsletter-backend",
+  "version": "0.1.0",
+  "author": {
+    "name": "Omar Molina",
+    "email": "ohmmolina@gmail.com"
+  },
   "module": "server.ts",
   "type": "module",
   "scripts": {
